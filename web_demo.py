@@ -7,7 +7,7 @@ import streamlit as st
 
 from lagent.actions import ActionExecutor, IPythonInterpreter
 from lagent.agents.internlm2_agent import META_CN, PLUGIN_CN, Internlm2Agent, Internlm2Protocol
-from lagent.llms.lmdepoly_wrapper import LMDeployClient
+from lagent.llms.openai import GPTAPI
 from lagent.llms.meta_template import INTERNLM2_META as META
 from lagent.schema import AgentStatusCode
 
@@ -118,17 +118,11 @@ class StreamlitUI:
 
     def init_model(self, option, ip="127.0.0.1:23333"):
         """Initialize the model based on the selected option."""
-        model_url = f'http://{ip}'
-        st.session_state['model_map'][option] = LMDeployClient(
-            model_url='internlm2-chat-7b',
-            url=model_url,
-            meta_template=META,
-            max_new_tokens=1024,
-            top_p=0.8,
-            top_k=100,
-            temperature=0,
-            repetition_penalty=1.0,
-            stop_words=['<|im_end|>'])
+        model_url = f'http://{ip}/v1/chat/completions'
+        st.session_state['model_map'][option] = GPTAPI(
+            model_type="internlm2-chat-7b",
+            openai_api_base=model_url
+        )
         return st.session_state['model_map'][option]
 
     def initialize_chatbot(self, model, plugin_action):

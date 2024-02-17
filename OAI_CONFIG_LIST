@@ -1,0 +1,7 @@
+[
+  {
+    "model": "internlm2",
+    "api_key": "abcdefg",
+    "base_url": "http://127.0.0.1:23333/v1",
+  }
+]
